@@ -2,11 +2,19 @@ import 'react-native-gesture-handler';
 import { View, Text, Button, ScrollView, Image, StyleSheet, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContent } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TodoScreen from './TodoScreen';
-import weatherScreen from './weather';
+import WeatherScreen from './weather';
+import { AuthProvider, useAuth, LoginScreen } from './login.js';
+import ChatScreenApp from './ChatScreen.js'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 
 let projcetURI = "https://blog.naver.com/PostView.naver?blogId=yeojun7429&Redirect=View&logNo=224066562332&categoryNo=1&isAfterWrite=true&isMrblogPost=false&isHappyBeanLeverage=true&contentLength=5853"
 
@@ -196,7 +204,7 @@ function MainTabs() {
       />
       <Tab.Screen
         name="weather"
-        component={weatherScreen}
+        component={WeatherScreen}
         options={{
           title: '날씨',
           headerShown: false,
@@ -223,12 +231,31 @@ function AboutScreen() {
   );
 }
 
+function CustomDrawerContent(props) {
+  const { signOut } = useAuth();
+
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList { ...props }/>
+      <View style={{ height: 1, backgroundColor: '#ccc', marginVertical: 10 }}/>
+      <DrawerItem 
+        label="로그아웃"
+        onPress={() => {
+          signOut();
+        }}
+        labelStyle={{ color: 'red', fontWeight: 'bold' }}
+      />
+    </DrawerContentScrollView>
+  );
+}
+
 function MainDrawerNavigator() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props}/>}>
       <Drawer.Screen name="Home" component={MainTabs} options={{ title: '홈(탭)' }} />
       <Drawer.Screen name="About" component={AboutScreen} options={{ title: '소개' }} />
       <Drawer.Screen name="Todo" component={TodoScreen} options={{title: '일정관리'}} />
+      <Drawer.Screen name="Chat" component={ChatScreenApp} options={{title: '채팅'}} />
     </Drawer.Navigator>
   );
 }
@@ -263,13 +290,28 @@ function RootNavigator() {
   );
 }
 
+function NavigationContent() {
+  const { isAuthenticated } = useAuth();
+  return (
+    <NavigationContainer>
+        {isAuthenticated ? (
+        <RootNavigator />
+      ) : (
+        <LoginScreen />
+      )}
+    </NavigationContainer>
+  )
+}
 
 const Drawer = createDrawerNavigator();
 export default function App() {
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <NavigationContent />
+      </AuthProvider>
+    </GestureHandlerRootView>
+    
   );
 }
 

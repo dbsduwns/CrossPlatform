@@ -31,13 +31,13 @@ import {
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBgvvCRzYtkZSaEZ5wJQqtV86If2G37Wnk",
-  authDomain: "todo-a46f0.firebaseapp.com",
-  projectId: "todo-a46f0",
-  storageBucket: "todo-a46f0.firebasestorage.app",
-  messagingSenderId: "456488177620",
-  appId: "1:456488177620:web:afb16007832b2d08ec9041",
-  measurementId: "G-GF8ZJ4QMJ0"
+  apiKey: "AIzaSyAn_yGzHHjIjNUIIzQeI1zldMS3e1HNsf0",
+  authDomain: "data-1e44e.firebaseapp.com",
+  projectId: "data-1e44e",
+  storageBucket: "data-1e44e.firebasestorage.app",
+  messagingSenderId: "822204090936",
+  appId: "1:822204090936:web:6636822c6c87578c9d34cd",
+  measurementId: "G-SW3YDDLS45"
 };
 
 // 앱 초기화
